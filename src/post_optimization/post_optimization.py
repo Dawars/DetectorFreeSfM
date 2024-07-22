@@ -49,7 +49,6 @@ cfgs = {
     "enable_update_reproj_kpts_to_model": False,
     "enable_adaptive_downscale_window": True, # Down scale searching window size after each iteration, e.g., 15->11->7
     "incremental_refiner_filter_thresholds": [3, 2, 1.5],
-    "incremental_refiner_use_pba": False, # NOTE: pba does not allow share intrins or fix extrinsics, and only allow simple_radial camer model
     "enable_multiple_models": False,
 }
 
@@ -94,7 +93,6 @@ def post_optimization(
         cfgs['fine_matcher']['model']['weight_path'] = matcher_model_path
     
     cfgs['coarse_colmap_data']['img_preload'] = img_preload
-    cfgs['incremental_refiner_use_pba'] = colmap_configs["use_pba"]
     cfgs['multiview_matcher_data']['chunk'] = chunk_size
 
     # Link images to temp directory for later extract colors.
@@ -190,7 +188,7 @@ def post_optimization(
 
         # Refinement:
         filter_threshold = cfgs['incremental_refiner_filter_thresholds'][i] if i < len(cfgs['incremental_refiner_filter_thresholds'])-1 else cfgs['incremental_refiner_filter_thresholds'][-1]
-        success = sfm_model_geometry_refiner.main(colmap_refined_kpts_dir, current_model_dir, no_filter_pts=cfgs["model_refiner_no_filter_pts"], colmap_configs=colmap_configs, image_path=temp_image_path, verbose=verbose, refine_3D_pts_only=refine_3D_pts_only, filter_threshold=filter_threshold, use_pba=cfgs["incremental_refiner_use_pba"])
+        success = sfm_model_geometry_refiner.main(colmap_refined_kpts_dir, current_model_dir, no_filter_pts=cfgs["model_refiner_no_filter_pts"], colmap_configs=colmap_configs, image_path=temp_image_path, verbose=verbose, refine_3D_pts_only=refine_3D_pts_only, filter_threshold=filter_threshold)
 
         if not success:
             # Refine failed scenario, use the coarse model instead.
