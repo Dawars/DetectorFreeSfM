@@ -1,4 +1,4 @@
-pytorch-lightning
+pytorch-lightning>=2.3.3
 ray
 opencv_python
 pycolmap==0.6.1
