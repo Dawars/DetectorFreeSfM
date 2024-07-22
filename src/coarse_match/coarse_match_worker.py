@@ -131,7 +131,7 @@ def match_worker(subset_ids, image_lists, covis_pairs_out, cfgs, pba=None, verbo
         )
 
         # Round mkpts to grid-level to construct feature tracks for the later SfM
-        if args['model']['type'] is not 'coarse_only' and args['round_matches_ratio'] is not None:
+        if args['model']['type'] != 'coarse_only' and args['round_matches_ratio'] is not None:
             mkpts0 = np.round((mkpts0 / data['scale0'][:, [1, 0]]) / args['round_matches_ratio']) * args['round_matches_ratio'] * data['scale0'][:, [1, 0]]
             mkpts1 = np.round((mkpts1 / data['scale1'][:, [1, 0]]) / args['round_matches_ratio']) * args['round_matches_ratio'] * data['scale1'][:, [1, 0]]
 
